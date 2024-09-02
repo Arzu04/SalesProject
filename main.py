@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 import pickle
 
-# Load the pre-trained model
+# Load the pre-trained pipeline
 with open('model_pipeline.pkl', 'rb') as file:
-    model = pickle.load(file)
+    pipeline = pickle.load(file)
 
 st.title('Sales Prediction App')
 
@@ -24,26 +24,31 @@ def get_input_features():
     month = st.sidebar.number_input('Month', min_value=1, max_value=12)
     day = st.sidebar.number_input('Day', min_value=1, max_value=31)
 
-    # Convert categorical inputs to numeric codes
-    category_code = {'Chicken': 0, 'Salt & Vinegar': 1, 'Other': 2}[category]
-    cleaned_mehsul_adi_code = {'S m i t h s': 0, 'T h i n s': 1}[cleaned_mehsul_adi]
-
+    # Create DataFrame from input features
     data = {
         'mağaza': [mağaza],
         'məhsul_nomresi': [məhsul_nomresi],
         'məhsul sayi': [məhsul_sayi],
         'qram': [qram],
-        'category': [category_code],
-        'cleaned_mehsul_adi': [cleaned_mehsul_adi_code],
+        'category': [category],
+        'cleaned_mehsul_adi': [cleaned_mehsul_adi],
         'year': [year],
         'month': [month],
         'day': [day]
     }
-    return pd.DataFrame(data)
+    input_df = pd.DataFrame(data)
+
+    return input_df
 
 input_features = get_input_features()
 
 # Predict button
 if st.button('Predict'):
-    prediction = model.predict(input_features)
-    st.write(f'Predicted Sales: {prediction[0]:.2f}')
+    try:
+        # Make prediction
+        prediction = pipeline.predict(input_features)
+        st.write(f'Predicted Sales: {prediction[0]:.2f}')
+    except KeyError as e:
+        st.error(f'KeyError: The input category or product name does not match the trained model. Please check the options.')
+    except Exception as e:
+        st.error(f'Error: {str(e)}')
