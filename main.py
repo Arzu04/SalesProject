@@ -20,7 +20,7 @@ def get_input_features():
        'Hot & Spicy', 'Nacho Cheese', 'Barbecue'])
     cleaned_mehsul_adi = st.sidebar.selectbox('Cleaned Product Name', options=['S m i t h s', 'T h i n s', 'D o r i t o s', 'C o b s',
        'F r e n c h', 'W W'])
-    year = st.sidebar.number_input('Year', min_value=1900, max_value=2100)
+    year = st.sidebar.number_input('Year', min_value=2018, max_value=2100)
     month = st.sidebar.number_input('Month', min_value=1, max_value=12)
     day = st.sidebar.number_input('Day', min_value=1, max_value=31)
 
